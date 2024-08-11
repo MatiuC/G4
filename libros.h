@@ -15,9 +15,6 @@ struct Tlibro {
     bool alquilado;      // Indica si el libro está alquilado o no
 } ;
 
-
-
-
 const int MAX_LIBROS = 1000;
 
 //Validador de apertura de archivos
@@ -35,4 +32,7 @@ void mostrarlibros();
 //Eliminar un libro del archivo por su ID.
 void eliminarLibro(int id);
 
+
+void leerTextoValidoOpcional(string &input, const string &mensaje, const string &valorActual);
+void modificarLibro(int id);
 #endif

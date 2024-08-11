@@ -13,47 +13,63 @@ bool verificarfile(ifstream &file, string archivo) {
 
 // Leer libros en el archivo para que el programa funcione a traves de eso
 int cargarlibros(Tlibro libros[]) {
-  ifstream archivo; // Definir variable para leer el archivo
-  if (!verificarfile(archivo, "libros.txt")) {
-    return 0;
-  }
-  int contador = 0;
-  while (contador < MAX_LIBROS &&
-         archivo >>
-             libros[contador].id // Leer el archivo y guardarlo en el arreglo de libros
-         && archivo.ignore() && getline(archivo, libros[contador].titulo) &&
-         getline(archivo, libros[contador].autor) &&
-         archivo >> libros[contador].anioPublicacion && archivo.ignore() &&
-         getline(archivo, libros[contador].editorial) &&
-         archivo >> libros[contador].alquilado) {
-    contador++; // Cuenta cuantos libros hay en el archivo
-  }
+        ifstream archivo; // Definir variable para leer el archivo
+        if (!verificarfile(archivo, "libros.txt")) {
+            return 0;
+        }
 
-  archivo.close();
-  return contador; // Retorna la cantidad de libros leídos
-}
+        string linea;
+        int contador = 0;
+
+        while (getline(archivo, linea) && contador < MAX_LIBROS) {
+            stringstream ss(linea);
+            string idStr, titulo, autor, anioStr, editorial, estadoStr;
+
+            // Leer los datos de la línea usando el stringstream
+            getline(ss, idStr, ',');
+            getline(ss, titulo, ',');
+            getline(ss, autor, ',');
+            getline(ss, anioStr, ',');
+            getline(ss, editorial, ',');
+            getline(ss, estadoStr, ',');
+
+            // Convertir los datos de tipo string a los tipos correspondientes
+            libros[contador].id = stoi(idStr);
+            libros[contador].titulo = titulo;
+            libros[contador].autor = autor;
+            libros[contador].anioPublicacion = stoi(anioStr);
+            libros[contador].editorial = editorial;
+            libros[contador].alquilado = stoi(estadoStr);
+
+            contador++;
+        }
+
+        archivo.close();
+        return contador; // Retorna la cantidad de libros leídos
+    }
+
 
 // Funcion util para guardar libros en el archivo
-bool guardarLibros(Tlibro libros[], int cantidadLibros,
-                   const string &nombreArchivo) {
-  ofstream archivo(nombreArchivo);
-  if (!archivo.is_open()) {
-    cout << "Error al abrir el archivo para guardar los libros." << endl;
-    return false;
-  }
+bool guardarLibros(Tlibro libros[], int cantidadLibros, const string &nombreArchivo) {
+    ofstream archivo(nombreArchivo);
+    if (!archivo.is_open()) {
+        cout << "Error al abrir el archivo para guardar los libros." << endl;
+        return false;
+    }
 
-  for (int i = 0; i < cantidadLibros; i++) {
-    archivo << libros[i].id << endl;
-    archivo << libros[i].titulo << endl;
-    archivo << libros[i].autor << endl;
-    archivo << libros[i].anioPublicacion << endl;
-    archivo << libros[i].editorial << endl;
-    archivo << libros[i].alquilado << endl;
-  }
+    for (int i = 0; i < cantidadLibros; i++) {
+        archivo << libros[i].id << ','
+                << libros[i].titulo << ','
+                << libros[i].autor << ','
+                << libros[i].anioPublicacion << ','
+                << libros[i].editorial << ','
+                << libros[i].alquilado << '\n'; // Añadir salto de línea al final de cada libro
+    }
 
-  archivo.close();
-  return true;
+    archivo.close();
+    return true;
 }
+
 
 // Funcion para verificar si ya existe un libro con un mismo id, los id tienen
 // que ser unicos
@@ -167,3 +183,94 @@ void eliminarLibro(int id){
         cout << "Error al eliminar el libro." << endl;
     }
 }
+// modificar un libro 
+
+// Función auxiliar para leer texto válido opcionalmente
+void leerTextoValidoOpcional(string &input, const string &mensaje, const string &valorActual) {
+    cout << mensaje << "(" << valorActual << "): ";
+    getline(cin, input);
+
+    if (input.empty()) {
+        input = valorActual; // Mantener el valor actual si no se ingresa nada
+    }
+}
+
+
+// Función para modificar un libro
+void modificarLibro(int id) {
+    Tlibro libros[MAX_LIBROS];
+    int cantidad = cargarlibros(libros);
+
+    // Buscar el libro con el ID dado
+    int posicion = -1;
+    for (int i = 0; i < cantidad; i++) {
+        if (libros[i].id == id) {
+            posicion = i;
+            break;
+        }
+    }
+
+    if (posicion == -1) {
+        cout << "No se encontró un libro con el ID " << id << endl;
+        return;
+    }
+
+    // Mostrar los detalles actuales del libro
+    cout << "Detalles actuales del libro:" << endl;
+    cout << "Título: " << libros[posicion].titulo << endl;
+    cout << "Autor: " << libros[posicion].autor << endl;
+    cout << "Año de Publicación: " << libros[posicion].anioPublicacion << endl;
+    cout << "Editorial: " << libros[posicion].editorial << endl;
+    cout << "Disponible para alquilar: " << (libros[posicion].alquilado ? "Sí" : "No") << endl;
+
+    // Modificar los detalles del libro
+    cout << "Ingrese los nuevos datos (presione enter para mantener el valor actual):" << endl;
+
+    string nuevoTitulo, nuevoAutor, nuevaEditorial;
+    string nuevoAnioStr, nuevoEstadoStr;
+    int nuevoAnio, nuevoEstado;
+
+    leerTextoValidoOpcional(nuevoTitulo, "Nuevo título: ", libros[posicion].titulo);
+    leerTextoValidoOpcional(nuevoAutor, "Nuevo autor: ", libros[posicion].autor);
+
+    cout << "Nuevo año de publicación (" << libros[posicion].anioPublicacion << "): ";
+    getline(cin, nuevoAnioStr);
+    if (!nuevoAnioStr.empty()) {
+        nuevoAnio = stoi(nuevoAnioStr);
+        if (!validarAnio(nuevoAnio)) {
+            cout << "Año inválido. No se realizaron cambios en el año de publicación." << endl;
+            nuevoAnio = libros[posicion].anioPublicacion;
+        }
+    } else {
+        nuevoAnio = libros[posicion].anioPublicacion;
+    }
+
+    leerTextoValidoOpcional(nuevaEditorial, "Nueva editorial: ", libros[posicion].editorial);
+
+    cout << "¿Está disponible para alquilar? (1 para sí, 0 para no): ";
+    getline(cin, nuevoEstadoStr);
+    if (!nuevoEstadoStr.empty()) {
+        nuevoEstado = stoi(nuevoEstadoStr);
+        if (!validarAlquilado(nuevoEstado)) {
+            cout << "Entrada inválida. No se realizaron cambios en el estado de alquiler." << endl;
+            nuevoEstado = libros[posicion].alquilado;
+        }
+    } else {
+        nuevoEstado = libros[posicion].alquilado;
+    }
+
+    // Actualizar el libro con los nuevos datos
+    libros[posicion].titulo = nuevoTitulo;
+    libros[posicion].autor = nuevoAutor;
+    libros[posicion].anioPublicacion = nuevoAnio;
+    libros[posicion].editorial = nuevaEditorial;
+    libros[posicion].alquilado = nuevoEstado;
+
+    // Guardar los cambios en el archivo
+    if (guardarLibros(libros, cantidad, "libros.txt")) {
+        cout << "Libro modificado con éxito." << endl;
+    } else {
+        cout << "Error al modificar el libro." << endl;
+    }
+}
+

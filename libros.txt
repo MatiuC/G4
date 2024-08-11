@@ -1,0 +1,2 @@
+2,Mecanica Elemental,Sterw,2000,555-Pop,1
+1,C++ Fundamentos,988-Lyhg,2016,6ma edicion,1
