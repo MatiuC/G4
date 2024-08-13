@@ -38,37 +38,60 @@ void registro() {
 
 string iniciar_usuario(string &usuario) {
   string contrasena;
-  int x = 0;
-  cout << "--------------------------------------" << endl;
-  setColor(WHITE);
-  cout << "Ingrese su usuario: ";
-  cin >> usuario;
-  setColor(WHITE);
-  cout << "Ingrese su contraseña: ";
-  cin >> contrasena;
-  ifstream dato_usuario("usuario.txt");
-  if (!dato_usuario) {
-    cout << "\nArchivo de usuarios no encontrado" << endl;
-    return " ";
-  }
-  string a, b;
-  while (dato_usuario >> a >> b) {
-    if (a == usuario && b == contrasena) {
-      x = 1;
-      break;
+  bool autenticado = false;
+
+  while (!autenticado) { // Ciclo hasta que se valide una contraseña correcta
+    cout << "--------------------------------------" << endl;
+    setColor(WHITE);
+    cout << "Ingrese su usuario: ";
+    cin >> usuario;
+
+    // Limpiar el buffer de entrada para evitar problemas con saltos de línea
+    cin.ignore();
+
+    setColor(WHITE);
+    cout << "Ingrese su contraseña: ";
+    cin >> contrasena;
+
+    // Limpiar el buffer de entrada nuevamente
+    cin.ignore();
+
+    ifstream dato_usuario("usuario.txt");
+    if (!dato_usuario) {
+      setColor(RED);
+      cout << "\nArchivo de usuarios no encontrado" << endl;
+      return " ";
+    }
+
+    string a, b;
+    while (dato_usuario >> a >> b) {
+      if (a == usuario && b == contrasena) {
+        autenticado = true;
+        break;
+      }
+    }
+    dato_usuario.close();
+
+    if (autenticado) {
+      setColor(WHITE);
+      cout << "Inicio de sesión exitoso" << endl;
+      opciones_usuario();
+    } else {
+      setColor(RED);
+      cout << "Usuario o contraseña incorrectos" << endl;
+      cout << "Presione ENTER para volver a intentar o 'Q' para salir: ";
+      char opcion;
+      cin.get(
+          opcion); // Usa cin.get() para leer un solo carácter, incluyendo ENTER
+
+      if (opcion == 'q' || opcion == 'Q') {
+        return " "; // Salir si se presiona 'q'
+      }
+      cout << endl; // Inserta una línea en blanco para mantener la separación
+                    // en el siguiente intento
     }
   }
-  dato_usuario.close();
 
-  // Validador de inicio de sesion exitoso
-  if (x == 1) {
-    setColor(WHITE);
-    cout << "Inicio de sesion exitoso" << endl;
-    opciones_usuario();
-  } else {
-    setColor(RED);
-    cout << "Usuario o contraseña incorrectos" << endl;
-  }
   return usuario;
 }
 
@@ -85,31 +108,57 @@ bool verificar_existencia_usuario(char a[]) {
 }
 
 // Funcion para el ingreso al sistema administrativo
+
 void iniciar_admin() {
   string admin, contraseña, admin1, contraseña1;
   ifstream lectura_admin;
-  lectura_admin.open("u_admin.txt");
-  lectura_admin >> admin;
-  lectura_admin >> contraseña;
-  lectura_admin.close();
-  cout << "--------------------------------------" << endl;
-  setColor(WHITE);
-  cout << "Ingrese su usuario: ";
-  cin >> admin1;
-  setColor(WHITE);
-  cout << "Ingrese su contraseña: ";
-  cin >> contraseña1;
-  if (admin == admin1 && contraseña == contraseña1) {
-    cout << "Inicio de sesion exitoso" << endl;
-    opciones_admin();
-  } else {
-  setColor(RED);
-    cout << "////// Inicio de sesion fallido, vuelva a intentar //////" << endl;
+
+  while (true) { // Ciclo infinito hasta que se valide una contraseña correcta
+    lectura_admin.open("u_admin.txt");
+    lectura_admin >> admin >> contraseña;
+    lectura_admin.close();
+
+    cout << "--------------------------------------" << endl;
+    setColor(WHITE);
+    cout << "Ingrese su usuario: ";
+    cin >> admin1;
+
+    // Limpiar el buffer de entrada para evitar problemas con saltos de línea
+    cin.ignore();
+
+    setColor(WHITE);
+    cout << "Ingrese su contraseña: ";
+    cin >> contraseña1;
+
+    // Limpiar el buffer de entrada nuevamente
+    cin.ignore();
+
+    if (admin == admin1 && contraseña == contraseña1) {
+      cout << "Inicio de sesión exitoso" << endl;
+      opciones_admin();
+      break; // Sale del ciclo si la autenticación es exitosa
+    } else {
+      setColor(RED);
+      cout << "*** Inicio de sesión fallido, vuelva a intentar ***" << endl;
+      cout << "Presione ENTER para volver a intentar o 'Q' para salir: ";
+      char opcion;
+      cin.get(
+          opcion); // Usa cin.get() para leer un solo carácter, incluyendo ENTER
+
+      if (opcion == 'q' || opcion == 'Q') {
+        break; // Salir del ciclo si se presiona 'q'
+      }
+      cout << endl; // Inserta una línea en blanco para mantener la separación
+                    // en el siguiente intento
+    }
   }
 }
 
 void mostrar_usuarios() {
-  string usuario, contraseña;
+  string usuarios[MAX];
+  string contrasenas[MAX];
+  int cantidadUsuarios = 0;
+
   ifstream lectura_usuario("usuario.txt");
 
   // Verifica si el archivo existe
@@ -118,17 +167,58 @@ void mostrar_usuarios() {
     cout << "Error al abrir el archivo." << endl;
     return;
   }
-  setColor(WHITE);
-  cout << "Usuarios con su respectiva contraseña:" << endl;
-  cout << "--------------------------------------" << endl;
-  while (lectura_usuario >> usuario >> contraseña) {
-    setColor(WHITE);
-    cout  << "Usuario: "  << usuario << endl
-          << "Contraseña: "  << contraseña << endl;
-    cout << "--------------------------------------" << endl;
+
+  // Leer todos los usuarios y contraseñas y guardarlos en los arreglos
+  while (lectura_usuario >> usuarios[cantidadUsuarios] >>
+         contrasenas[cantidadUsuarios]) {
+    cantidadUsuarios++;
+    if (cantidadUsuarios >= MAX) {
+      break; // Evitar desbordamiento del arreglo
+    }
+  }
+  lectura_usuario.close();
+
+  if (cantidadUsuarios == 0) {
+    setColor(RED);
+    cout << "No hay usuarios para mostrar." << endl;
+    return;
   }
 
-  lectura_usuario.close();
+  int elementosPorPagina = 5;
+  int pagina = 0;
+  int numPaginas =
+      (cantidadUsuarios + elementosPorPagina - 1) / elementosPorPagina;
+
+  while (true) {
+    rlutil::cls(); // Limpiar la pantalla
+
+    setColor(WHITE);
+    cout << "Usuarios con su respectiva contraseña:" << endl;
+    cout << "--------------------------------------" << endl;
+
+    int inicio = pagina * elementosPorPagina;
+    int fin = std::min(inicio + elementosPorPagina, cantidadUsuarios);
+
+    for (int i = inicio; i < fin; ++i) {
+      cout << "Usuario: " << usuarios[i] << endl
+           << "Contraseña: " << contrasenas[i] << endl;
+      cout << "--------------------------------------" << endl;
+    }
+    cout << "Página actual: " << pagina + 1 << " de " << numPaginas << endl;
+    cout << "\nUsa 'p' para ir a la página siguiente, 'o' para ir a la página "
+            "anterior. Presiona 'q' para salir."
+         << endl;
+
+    int key = getkey(); // Capturar la tecla presionada
+
+    if (key == 'p' && pagina < numPaginas - 1) {
+      pagina++;
+    } else if (key == 'o' && pagina > 0) {
+      pagina--;
+    } else if (key == 'q') { // Salir si presionas 'q'
+      break;
+    }
+  }
 }
 
 // Funciones para alquilar o devolver un libro por su ID
@@ -250,40 +340,77 @@ void devolver_libro(int id, string usuario) {
   cout << "El libro con ID " << id << " ha sido devuelto exitosamente." << endl;
 }
 
-void buscarPorAutor(const string& autor) {
-  string id, titulo, autorLibro, anio, edicion, stock;
-  bool encontrado = 0;
-    ifstream lecturalibros("libros.txt");
-    if (!lecturalibros.is_open()) {
-        cout << "No se pudo abrir el archivo." << endl;
+void buscarPorAutor(const string &autor) {
+  const int MAX_LIBROS = 100; // Tamaño máximo para el arreglo
+  int id[MAX_LIBROS];
+  string titulo[MAX_LIBROS], autorLibro[MAX_LIBROS], anio[MAX_LIBROS],
+      edicion[MAX_LIBROS], stock[MAX_LIBROS];
+  int cantidadLibros = 0;
+
+  ifstream lecturalibros("libros.txt");
+  if (!lecturalibros.is_open()) {
+    cout << "No se pudo abrir el archivo." << endl;
+    return;
+  }
+
+  while (lecturalibros >> id[cantidadLibros]) {
+    lecturalibros.ignore(); // Ignora la coma
+
+    // Lee el título, autor, año, edición y stock
+    getline(lecturalibros, titulo[cantidadLibros], ',');
+    getline(lecturalibros, autorLibro[cantidadLibros], ',');
+    getline(lecturalibros, anio[cantidadLibros], ',');
+    getline(lecturalibros, edicion[cantidadLibros], ',');
+    getline(lecturalibros, stock[cantidadLibros]);
+
+    if (autorLibro[cantidadLibros] == autor) {
+      cantidadLibros++;
     }
-  else{
-    while (lecturalibros >> id) {
-          lecturalibros.ignore(); // Ignora la coma
+  }
+  lecturalibros.close();
 
-        // Lee mi título, autor, año, edición y stock
-        getline(lecturalibros, titulo, ',');
-        getline(lecturalibros, autorLibro, ',');
-        getline(lecturalibros, anio, ',');
-        getline(lecturalibros, edicion, ',');
-        getline(lecturalibros, stock);
+  if (cantidadLibros == 0) {
+    cout << "No se encontró ningún libro del autor " << autor << "." << endl;
+    return;
+  }
 
-        if (autorLibro == autor) { //Compara el autor ingresado con el autor del libro
-            cout << "ID: " << id << endl;
-            cout << "Título: " << titulo << endl;
-            cout << "Autor: " << autorLibro << endl;
-            cout << "Año: " << anio << endl;
-            cout << "Edición: " << edicion << endl;
-            cout << "Stock: " << stock << endl;
-            cout << "-----------------------" << endl;
-            encontrado = 1;
-        }
+  int elementosPorPagina = 5;
+  int pagina = 0;
+  int numPaginas =
+      (cantidadLibros + elementosPorPagina - 1) / elementosPorPagina;
+
+  while (true) {
+    cls(); // Limpiar la pantalla
+
+    setColor(WHITE);
+    cout << "Libros del autor " << autor << ":" << endl;
+    cout << "-----------------------" << endl;
+
+    int inicio = pagina * elementosPorPagina;
+    int fin = min(inicio + elementosPorPagina, cantidadLibros);
+
+    for (int i = inicio; i < fin; ++i) {
+      cout << "ID: " << id[i] << endl;
+      cout << "Título: " << titulo[i] << endl;
+      cout << "Autor: " << autorLibro[i] << endl;
+      cout << "Año: " << anio[i] << endl;
+      cout << "Edición: " << edicion[i] << endl;
+      cout << "Dispinibilidad: " << (stock[i] == "1" ? "Si" : "No") << endl;
+      cout << "-----------------------" << endl;
     }
 
-    if (!encontrado) {
-        cout << "No se encontró ningún libro del autor " << autor << "." << endl;
-    }
+    cout << "\nUsa 'p' para ir a la página siguiente, 'o' para ir a la página "
+            "anterior. Presiona 'q' para salir."
+         << endl;
 
-    lecturalibros.close();
+    int key = getkey(); // Capturar la tecla presionada
+
+    if (key == 'p' && pagina < numPaginas - 1) {
+      pagina++;
+    } else if (key == 'o' && pagina > 0) {
+      pagina--;
+    } else if (key == 'q') { // Salir si presionas 'q'
+      break;
+    }
   }
 }

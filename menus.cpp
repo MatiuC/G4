@@ -1,112 +1,64 @@
 #include "menus.h"
 #include "libros.h"
 #include "usuarios.h"
-// Menu principal de inicio
+#include "rlutil.h"
+
 string user = " ";
-int menu_usuarios() {
-  int op = -1;
-  while ((op < 0) || (op > 2)) {
-    setColor(GREEN);
-    cout  << "--------------------------------------" << endl;
-    cout << R"(
-+--------------------------+
-|BIENVENIDO A LA BIBLIOTECA|
-+--------------------------+
-)" << endl;
+
+void showMenu(const char* options[], int posx, int posy, int selected) {
+    setBackgroundColor(BLACK);
     setColor(WHITE);
-    cout <<  " 1. Iniciar sesión " << endl;
-    setColor(WHITE);
-    cout << " 2. Registrarse" << endl;
-    setColor(WHITE);
-    cout << " 0. Salir " << endl;
-    setColor(LIGHTCYAN);
-    cout << "Ingrese el numero de opcion: ";
-    cin >> op;
-    if ((op < 0) || (op > 2)) {
-      setColor(RED);
-      cout 
-           << "------ Opción no valida, ingrese una opcion valida. ------"
-           << endl;
+    hidecursor();
+    for (int i = 0; options[i] != NULL; i++) {
+        if (i == selected) {
+            setBackgroundColor(BLUE);
+            locate(posx , posy + i);
+            cout << " " << (char)61 << " " << options[i] << " " << (char)61 << endl;
+        } else {
+            setBackgroundColor(BLACK);
+            locate(posx + 12, posy + i);
+            cout << options[i] << endl;
+        }
     }
-  }
-  cout << endl;
-  return op;
+    setBackgroundColor(BLACK);
 }
+
+//Menu principal de inicio
 
 int usuarios() {
-  int opcion;
-  opcion = menu_usuarios();
-  while (opcion != 0) {
-    switch (opcion) {
-    case 1:
-      iniciar_sesion();
-      break;
-    case 2:
-      registro();
-      break;
-    default: {
-      cout
-           << "------ Opción no valida, ingrese una opcion valida. ------"
-           << endl;
-      break;
-    }
-    }
-    opcion = menu_usuarios();
-  }
-  return 0;
+    const char* options[] = {"INICIAR SESION", "REGISTRARSE", "SALIR", NULL};
+    int op = 1, y = 0; 
+    do {
+        cls(); 
+        showMenu(options, 30, 10, y); 
+        switch (getkey()) {
+            case 65: // Bajar
+                y--;
+                if (y < 0) {
+                    y = 0; 
+                }
+                break;
+            case 66: // subir
+                y++;
+                if (y > 2) {
+                    y = 2; 
+                }
+                break;
+            case 32: // Espacio
+                 if (y == 0) {
+                     iniciar_sesion();
+                 } else if (y == 1){
+                    registro ();
+                 } else {
+                     op = 3;
+                     return -1;
+                 }
+                 break;
+                
+        }
+    } while (op != 2); 
+    return 0;
 }
-
-// Menu de inicio de sesion USUARIO-ADMINISTRADOR
-
-int menu_inicio_sesion() {
-  int op = -1;
-  while ((op < 0) || (op > 3)) {
-    setColor(GREEN);
-    cout << "--------------------------------------" << endl;
-    cout << R"(
-+------------------------------+
-|BIENVENIDO AL INICIO DE SESION|
-+------------------------------+
-)" << endl;
-    setColor(WHITE);
-    cout  << " 1. Usuario " << endl;
-    setColor(WHITE);
-    cout << " 2. Administrador" << endl;
-    setColor(WHITE);
-    cout << " 0. Regresar " << endl;
-    setColor(LIGHTCYAN);
-    cout << "Ingrese el numero de opcion: ";
-    cin >> op;
-    if ((op < 0) || (op > 3)) {
-      setColor(RED);
-      cout 
-           << "------ Opción no valida, ingrese una opcion valida. ------"
-           << endl;
-    }
-  }
-  cout << endl;
-  return op;
-}
-
-int iniciar_sesion() {
-  int opcion;
-  opcion = menu_inicio_sesion();
-  while (opcion != 0) {
-    switch (opcion) {
-    case 1:
-      user = iniciar_usuario(user);
-      break;
-    case 2:
-      iniciar_admin();
-      break;
-    }
-    opcion = menu_inicio_sesion();
-  }
-
-  return 0;
-}
-
-// Menu opciones unicamente del administrador
 int menu_admin() {
   int op = -1;
   while ((op < 0) || (op > 5)) {
@@ -144,67 +96,108 @@ int menu_admin() {
   return op;
 }
 
-int opciones_admin() {
-  int opcion, id;
-  opcion = menu_admin();
-  while (opcion != 0) {
-    switch (opcion) {
-    case 1:
-      mostrarlibros();
-      break;
-    case 2:
-      agregarLibro();
-      break;
-    case 3:
-      setColor(WHITE);
-      cout << "Ingrese el ID del libro que desea modificar: " 
-           << endl;
-      cin >> id;
-      modificarLibro(id);
-      break;
-    case 4:
-      setColor(WHITE);
-      cout 
-           << "Ingrese el ID del libro que desea eliminar: ";
-      cin >> id;
-      eliminarLibro(id);
-        break;
-    case 5:
-      mostrar_usuarios();
-      break;
-    }
-    opcion = menu_admin();
-  }
-  return 0;
+// Menu de inicio de sesion USUARIO-ADMINISTRADOR
+int iniciar_sesion() {
+    const char* options[] = {"USUARIO", "ADMINISTRADOR", "SALIR", NULL};
+    int op = 1, y = 0; 
+    do {
+        cls(); 
+        showMenu(options, 30, 10, y); 
+        switch (getkey()) {
+            case 65: // Bajar
+                y--;
+                if (y < 0) {
+                    y = 0; 
+                }
+                break;
+            case 66: // subir
+                y++;
+                if (y > 2) {
+                    y = 2; 
+                }
+                break;
+            case 32: // Espacio
+                if (y == 0) {
+                    iniciar_usuario(user);
+                } else if (y == 1) {
+                    iniciar_admin();
+                } else {
+                    return 0;
+                }
+                break;
+        }
+    } while (op != 2); 
+    return 0;
 }
+
+
+// Menu opciones unicamente del administrador
+int opciones_admin() {
+  int id;
+  const char* options[] = {"MOSTRAR LIBROS", "AGREGAR LIBROS", "MODIFICAR LIBROS", "MOSTRAR USUARIOS Y CONTRASEÑAS","CERRAR SESION", NULL};
+      int op = 1, y = 0; 
+      do {
+          cls(); 
+          showMenu(options, 30, 10, y); 
+          switch (getkey()) {
+              case 65: // Bajar
+                  y--;
+                  if (y < 0) {
+                      y = 0; 
+                  }
+                  break;
+              case 66: // subir
+                  y++;
+                  if (y > 5) {
+                      y = 5; 
+                  }
+                  break;
+              case 32: // Espacio
+                  if (y == 0) {
+                      mostrarlibros();
+                    break;
+                  } else if (y == 1) {
+                      agregarLibro();
+                    break;
+                  } else if (y== 2) {
+                      cout << "Ingrese el ID del libro que desea modificar: " 
+                         << endl;
+                      cin >> id;
+                      modificarLibro(id);
+                    break;
+                  } else if (y == 3){  
+                       mostrar_usuarios();
+                    break;
+                  } else {
+                      iniciar_sesion();
+                  }
+                  break;
+          }
+      } while (op != 3); 
+      return 0;
+  }
 
 // Menu opciones unicamente del usuario
 
 int menu_usuario() {
   int op = -1;
   while ((op < 0) || (op > 3)) {
-    setColor(GREEN);
-    cout  << "--------------------------------------" << endl;
-    cout  << R"(
+    cout <<  "--------------------------------------" << endl;
+    cout <<  R"(
 +-----------------------------+
 |BIENVENIDO AL MENU DE USUARIO|
 +-----------------------------+
 )" << endl;
     // cout << LGREEN << "///BIENVENIDO AL MENÚ DE USUARIO///" << endl;
-    setColor(WHITE);
     cout << " 1. Alquilar libro " << endl;
-    setColor(WHITE);
     cout << " 2. Devolver libro " << endl;
-    setColor(WHITE);
     cout << " 3. Buscar libro " << endl;
-    setColor(WHITE);
     cout << " 0. Cerrar Sesión " << endl;
-    setColor(LIGHTCYAN);
     cout << "Ingrese el numero de opcion: ";
     cin >> op;
     if ((op < 0) || (op > 3)) {
-      setColor(RED);
-      cout << "------ Opción no valida, ingrese una opcion valida. ------"
+      cout << 
+            "------ Opción no valida, ingrese una opcion valida. ------"
            << endl;
     }
   }
@@ -212,33 +205,54 @@ int menu_usuario() {
   return op;
 }
 
-int opciones_usuario() {
-  int opcion, a, b;
-  setColor(WHITE);
-  cout << "usuario actual: " << user << endl;
 
-  opcion = menu_usuario();
-  while (opcion != 0) {
-    switch (opcion) {
-    case 1:
-      cout << " " << endl;
-      setColor(WHITE);
-      cout << "Ingrese la id del libro que desea alquilar:" << endl;
-      cin >> a;
-      alquilar_libro(a, user);
-      break;
-    case 2:
-      cout << " " << endl;
-      setColor(WHITE);
-      cout << "Ingrese la id del libro que desea devolver:" << endl;
-      cin >> b;
-      devolver_libro(b, user);
-      break;
-    case 3:
-      mostrarlibros();
-      break;
-    }
-    opcion = menu_usuario();
-  }
+int opciones_usuario() {
+  int  a, b;
+      string autor;
+      const char* options[] = {"ALQUILAR LIBRO", "DEVOLVER LIBRO", "MOSTRAR LIBROS", "BUSCAR LIBRO POR AUTOR", "CERRAR SESION" , NULL};
+      int op = 1, y = 0; 
+      do {
+          rlutil::cls(); 
+          showMenu(options, 30, 10, y); 
+          switch (getkey()) {
+              case 65: // Bajar
+                  y--;
+                  if (y < 0) {
+                      y = 0; 
+                  }
+                  break;
+              case 66: // subir
+                  y++;
+                  if (y > 4) {
+                      y = 4; 
+                  }
+                  break;
+              case 32: // Espacio
+                  if (y == 0) {
+                      cout << " " << endl;
+                      cout << "Ingrese la id del libro que desea alquilar:" << endl;
+                      cin >> a;
+                      alquilar_libro(a, user);
+                    break;
+                  } else if (y == 1) {
+                      cout << " " << endl;
+                      cout << "Ingrese la id del libro que desea devolver:" << endl;
+                      cin >> b;
+                      devolver_libro(b, user);
+                    break;
+                  } else if (y == 2) {
+                      mostrarlibros();
+                    break;
+                  }else if (y == 3){
+                      cout << "Ingrese el nombre del autor: ";
+                      getline(cin, autor);
+                      buscarPorAutor(autor);
+                  } else {
+                      iniciar_sesion();
+                  }
+                  break;
+          }
+      } while (op != 4); 
+
   return 0;
 }
