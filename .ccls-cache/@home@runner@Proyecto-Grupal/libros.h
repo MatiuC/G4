@@ -5,6 +5,9 @@
 #include <fstream>
 #include <string>
 #include <iomanip>
+#include "rlutil.h"
+
+using namespace rlutil;
 using namespace std;
 struct Tlibro {
     int id;                   // Identificador único del libro
@@ -31,6 +34,7 @@ void agregarLibro();
 void mostrarlibros();
 //Eliminar un libro del archivo por su ID.
 void eliminarLibro(int id);
+
 
 
 void leerTextoValidoOpcional(string &input, const string &mensaje, const string &valorActual);

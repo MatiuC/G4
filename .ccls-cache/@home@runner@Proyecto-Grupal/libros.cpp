@@ -1,11 +1,13 @@
 #include "libros.h"
 #include "validadores.h"
-#include "colores.h"
+
+
 
 // Validador de apertura de archivos
 bool verificarfile(ifstream &file, string archivo) {
   file.open(archivo);
   if (!file.is_open()) {
+    setColor(RED);
     cout << "Error al abrir el archivo: " << archivo << endl;
     return false;
   }
@@ -88,8 +90,10 @@ void agregarLibro() {
     int cantidad = cargarlibros(libros);
 
     Tlibro librotemp;
+    setColor(LIGHTGREEN);
     cout << "Ingrese el id del libro: ";
     while (!(cin >> librotemp.id) || !validarId(librotemp.id)) {
+        setColor(RED);
         cout << "ID inválido. Ingrese un número positivo: ";
         cin.clear(); // Limpiar el estado de error
         cin.ignore(); // Limpiar el buffer de entrada
@@ -97,25 +101,28 @@ void agregarLibro() {
     cin.ignore(); // Limpiar el buffer de entrada
 
     if (libroexiste(librotemp.id, libros, cantidad)) {
+        setColor(RED);
         cout << "Error: Ya existe un libro con este ID. \nIntente con otro" << endl;
         return;
     }
-
+    setColor(LIGHTGREEN);
     leerTextoValido(librotemp.titulo, "Ingrese el título del libro: ", "Título inválido. Ingrese nuevamente: ");
     leerTextoValido(librotemp.autor, "Ingrese el autor del libro: ", "Autor inválido. Ingrese nuevamente: ");
-
+    setColor(LIGHTGREEN);
     cout << "Ingrese el año de publicación: ";
     while (!(cin >> librotemp.anioPublicacion) || !validarAnio(librotemp.anioPublicacion)) {
+        setColor(RED);
         cout << "Año inválido. Ingrese un año entre 1900 y 2024: \n";
         cin.clear(); // Limpiar el estado de error
         cin.ignore(); // Limpiar el buffer de entrada
     }
     cin.ignore(); // Limpiar el buffer de entrada
-
+    
     leerTextoValido(librotemp.editorial, "Ingrese la editorial del libro: ", "Editorial inválida. Ingrese nuevamente: ");
-
+    setColor(LIGHTGREEN);
     cout << "El libro está disponible para alquilar? (1 para sí, 0 para no): ";
     while (!(cin >> librotemp.alquilado) || !validarAlquilado(librotemp.alquilado)) {
+        setColor(RED);
         cout << "Entrada inválida. Ingrese 1 para sí o 0 para no: ";
         cin.clear(); // Limpiar el estado de error
         cin.ignore(); // Limpiar el buffer de entrada
@@ -123,31 +130,63 @@ void agregarLibro() {
     cin.ignore(); // Limpiar el buffer de entrada
 
     libros[cantidad++] = librotemp;
-
+    setColor(GREEN);
     if (guardarLibros(libros, cantidad, "libros.txt")) {
         cout << "Libro agregado con éxito." << endl;
     }
 }
+
+#include "rlutil.h" // Asegúrate de incluir rlutil.h para el manejo de teclas y colores
 
 void mostrarlibros() {
     Tlibro libros[MAX_LIBROS];
     int cantidadLibros = cargarlibros(libros);
 
     if (cantidadLibros == 0) {
+        setColor(RED);
         cout << "No hay libros para mostrar." << endl;
         return;
     }
 
-    cout << RESTABLECER << "Lista de libros:" << endl;
-    cout << "---------------------------------\n";
-    for (int i = 0; i < cantidadLibros; i++) {
-        cout << NARANJA << "ID: " << RESTABLECER << libros[i].id << endl;
-        cout << NARANJA << "Título: " << RESTABLECER << libros[i].titulo << endl;
-        cout << NARANJA << "Autor: " << RESTABLECER << libros[i].autor << endl;
-        cout << NARANJA << "Año de Publicación: " << RESTABLECER << libros[i].anioPublicacion << endl;
-        cout << NARANJA << "Editorial: " << RESTABLECER << libros[i].editorial << endl;
-        cout << NARANJA << "Disponible para alquilar: " << RESTABLECER << (libros[i].alquilado ? "Sí" : "No") << endl;
-        cout << BLANCO << "---------------------------------" << endl;
+    int elementosPorPagina = 5;
+    int pagina = 0;
+    int numPaginas = (cantidadLibros + elementosPorPagina - 1) / elementosPorPagina;
+
+    while (true) {
+        rlutil::cls(); // Limpiar la pantalla
+
+        cout << "Lista de libros:" << endl;
+        cout << "---------------------------------\n";
+
+        int inicio = pagina * elementosPorPagina;
+        int fin = std::min(inicio + elementosPorPagina, cantidadLibros);
+
+        for (int i = inicio; i < fin; ++i) {
+            setColor(WHITE);
+            cout << "ID: " << libros[i].id << endl;
+            cout << "Título: " << libros[i].titulo << endl;
+            cout << "Autor: " << libros[i].autor << endl;
+            cout << "Año de Publicación: " << libros[i].anioPublicacion << endl;
+            cout << "Editorial: " << libros[i].editorial << endl;
+            cout << "Disponible para alquilar: " << (libros[i].alquilado ? "Si" : "No") << endl;
+            cout << "---------------------------------\n";
+        }
+
+        cout << "\nUsa 'p' para ir a la página siguiente, 'o' para ir a la página anterior. Presiona 'q' para salir." << endl;
+
+        int key = rlutil::getkey(); // Capturar la tecla presionada
+
+        if (key == 'p' && pagina < numPaginas - 1) {
+            pagina++;
+        } else if (key == 'o' && pagina > 0) {
+            pagina--;
+        } else if (key == 'q') { // Salir si presionas 'q'
+            break;
+        }
+
+        // DEBUG: Mostrar valores de la página y teclas
+        cout << "Página actual: " << pagina + 1 << " de " << numPaginas << endl;
+        //rlutil::anykey("Presiona cualquier tecla para continuar...");
     }
 }
 

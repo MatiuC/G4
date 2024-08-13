@@ -8,16 +8,17 @@
 #include <iomanip>
 #include <iostream>
 #include <string>
+#include "rlutil.h"
+
+using namespace rlutil;
 using namespace std;
-
-//variable global
-
 
 void registro();
 bool verificar_existencia_usuario(char a[]);
 string iniciar_usuario(string &usuario);
 void iniciar_admin();
 void mostrar_usuarios();
+void buscarPorAutor(const string& autor);
 
 // ALQUILER
 void alquilar_libro(int id, string usuario);

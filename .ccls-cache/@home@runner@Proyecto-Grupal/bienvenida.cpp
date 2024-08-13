@@ -1,8 +1,9 @@
 #include "bienvenida.h"
-#include "colores.h"
+
 using namespace std;
 void bienvenido() {
-    cout << NARANJA << R"(
+    setColor(BLUE);
+    cout << R"(
   ____    _                                         _       _         
  |  _ \  (_)                                       (_)     | |        
  | |_) |  _    ___   _ __   __   __   ___   _ __    _    __| |   ___  
@@ -36,7 +37,8 @@ void biblioteca(){
     )" << endl;
 }
 void continuar(){
-    cout << LGREEN << R"(
+    setColor(GREEN);
+    cout  << R"(
                  +-----------------------------+
                  |PRESIONE ENTER PARA CONTINUAR|
                  +-----------------------------+

@@ -10,13 +10,16 @@ void registro() {
   char usuario[MAX];
 
   while (usuario_existe) {
+    setColor(RED);
     cout << "--------------------------------------" << endl;
+    setColor(WHITE);
     cout << "Ingrese su usuario: ";
     cin >> usuario;
     // Funcion para verificar la existencia o no de un usuario para que no se
     // repita
     usuario_existe = verificar_existencia_usuario(usuario);
     if (usuario_existe) {
+      setColor(RED);
       cout << "El usuario ya existe. Ingrese otro usuario: " << endl;
     }
   }
@@ -37,8 +40,10 @@ string iniciar_usuario(string &usuario) {
   string contrasena;
   int x = 0;
   cout << "--------------------------------------" << endl;
+  setColor(WHITE);
   cout << "Ingrese su usuario: ";
   cin >> usuario;
+  setColor(WHITE);
   cout << "Ingrese su contraseña: ";
   cin >> contrasena;
   ifstream dato_usuario("usuario.txt");
@@ -57,9 +62,11 @@ string iniciar_usuario(string &usuario) {
 
   // Validador de inicio de sesion exitoso
   if (x == 1) {
+    setColor(WHITE);
     cout << "Inicio de sesion exitoso" << endl;
     opciones_usuario();
   } else {
+    setColor(RED);
     cout << "Usuario o contraseña incorrectos" << endl;
   }
   return usuario;
@@ -86,14 +93,17 @@ void iniciar_admin() {
   lectura_admin >> contraseña;
   lectura_admin.close();
   cout << "--------------------------------------" << endl;
+  setColor(WHITE);
   cout << "Ingrese su usuario: ";
   cin >> admin1;
+  setColor(WHITE);
   cout << "Ingrese su contraseña: ";
   cin >> contraseña1;
   if (admin == admin1 && contraseña == contraseña1) {
     cout << "Inicio de sesion exitoso" << endl;
     opciones_admin();
   } else {
+  setColor(RED);
     cout << "////// Inicio de sesion fallido, vuelva a intentar //////" << endl;
   }
 }
@@ -104,15 +114,17 @@ void mostrar_usuarios() {
 
   // Verifica si el archivo existe
   if (!lectura_usuario.is_open()) {
+    setColor(RED);
     cout << "Error al abrir el archivo." << endl;
     return;
   }
-
+  setColor(WHITE);
   cout << "Usuarios con su respectiva contraseña:" << endl;
   cout << "--------------------------------------" << endl;
   while (lectura_usuario >> usuario >> contraseña) {
-    cout << "Usuario: " << usuario << ":  |" << contraseña << left << setw(6)
-         << "|" << endl;
+    setColor(WHITE);
+    cout  << "Usuario: "  << usuario << endl
+          << "Contraseña: "  << contraseña << endl;
     cout << "--------------------------------------" << endl;
   }
 
@@ -134,11 +146,13 @@ void alquilar_libro(int id, string usuario) {
 
   // Verificar si el libro existe
   if (posicion == -1) {
+    setColor(WHITE);
     cout << "El libro con ID " << id << " no se encontró." << endl;
     return;
   }
   // Verificar si el libro está disponible
   if (libros[posicion].alquilado == false) {
+    setColor(WHITE);
     cout << "El libro con ID " << id << " no está disponible para alquiler."
          << endl;
     return;
@@ -234,4 +248,42 @@ void devolver_libro(int id, string usuario) {
   rename("alquileres_temp.txt", "alquileres.txt");
 
   cout << "El libro con ID " << id << " ha sido devuelto exitosamente." << endl;
+}
+
+void buscarPorAutor(const string& autor) {
+  string id, titulo, autorLibro, anio, edicion, stock;
+  bool encontrado = 0;
+    ifstream lecturalibros("libros.txt");
+    if (!lecturalibros.is_open()) {
+        cout << "No se pudo abrir el archivo." << endl;
+    }
+  else{
+    while (lecturalibros >> id) {
+          lecturalibros.ignore(); // Ignora la coma
+
+        // Lee mi título, autor, año, edición y stock
+        getline(lecturalibros, titulo, ',');
+        getline(lecturalibros, autorLibro, ',');
+        getline(lecturalibros, anio, ',');
+        getline(lecturalibros, edicion, ',');
+        getline(lecturalibros, stock);
+
+        if (autorLibro == autor) { //Compara el autor ingresado con el autor del libro
+            cout << "ID: " << id << endl;
+            cout << "Título: " << titulo << endl;
+            cout << "Autor: " << autorLibro << endl;
+            cout << "Año: " << anio << endl;
+            cout << "Edición: " << edicion << endl;
+            cout << "Stock: " << stock << endl;
+            cout << "-----------------------" << endl;
+            encontrado = 1;
+        }
+    }
+
+    if (!encontrado) {
+        cout << "No se encontró ningún libro del autor " << autor << "." << endl;
+    }
+
+    lecturalibros.close();
+  }
 }

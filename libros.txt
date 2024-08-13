@@ -2,4 +2,24 @@
 2,Java para principiantes,Javier Santoalla,2014,Serwey,0
 3,Crimen y castigo,Fiodor Dostoyevski,2014,Pluto Ediciones,1
 4,Matematicas para la economia,Calvoche,2024,EPN Publicaciones,1
-5,El Circuito,Ben Oliver,2020,Destino,1
+5,El arte de la programación,Donald Knuth,2011,Addison-Wesley,1
+6,Introducción a Python,Guido van Rossum,2016,O'Reilly Media,0
+7,JavaScript: The Good Parts,Douglas Crockford,2008,O'Reilly Media,1
+8,El Quijote,Miguel de Cervantes,1605,Editorial Clásica,1
+9,Inteligencia Artificial: Un enfoque moderno,Stuart Russell,2020,Prentice Hall,0
+10,La Odisea,Homero,2000,Editorial Gredos,1
+11,Estructuras de datos en C++,Bjarne Stroustrup,2018,Pearson,1
+12,Programación con R,Hadley Wickham,2017,O'Reilly Media,0
+13,El proceso,Franz Kafka,2019,Pluto Ediciones,1
+14,Algoritmos: Diseño y análisis,Thomas H. Cormen,2009,McGraw-Hill,1
+15,Física para ciencias e ingeniería,Raymond A. Serway,2013,Cengage Learning,1
+16,La metamorfosis,Franz Kafka,2003,Editorial Siruela,1
+17,Teoría de juegos,Drew Fudenberg,1991,MIT Press,1
+18,Redes neuronales y aprendizaje profundo,Ian Goodfellow,2016,MIT Press,0
+19,Sistemas operativos,Andrew S. Tanenbaum,2014,Pearson,1
+20,La teoría del todo,Stephen Hawking,2002,Crítica,1
+21,Fundamentos de bases de datos,Abraham Silberschatz,2010,McGraw-Hill,0
+22,La república,Platón,2015,Editorial Gredos,1
+23,Cálculo: Trascendentes tempranas,James Stewart,2008,Cengage Learning,1
+24,El principito,Antoine de Saint-Exupéry,1943,Editorial Salamandra,1
+25,El hombre en busca de sentido,Viktor Frankl,2009,Herder,1

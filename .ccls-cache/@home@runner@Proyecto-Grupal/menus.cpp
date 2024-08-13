@@ -1,5 +1,4 @@
 #include "menus.h"
-#include "colores.h"
 #include "libros.h"
 #include "usuarios.h"
 // Menu principal de inicio
@@ -7,20 +6,25 @@ string user = " ";
 int menu_usuarios() {
   int op = -1;
   while ((op < 0) || (op > 2)) {
-    cout << ROJO << "--------------------------------------" << endl;
-    cout << LGREEN << R"(
+    setColor(GREEN);
+    cout  << "--------------------------------------" << endl;
+    cout << R"(
 +--------------------------+
 |BIENVENIDO A LA BIBLIOTECA|
 +--------------------------+
 )" << endl;
-    // cout << LGREEN << "///BIENVENIDO A LA BIBLIOTECA///" << endl;
-    cout << GRIS << " 1. Iniciar sesión " << endl;
+    setColor(WHITE);
+    cout <<  " 1. Iniciar sesión " << endl;
+    setColor(WHITE);
     cout << " 2. Registrarse" << endl;
+    setColor(WHITE);
     cout << " 0. Salir " << endl;
+    setColor(LIGHTCYAN);
     cout << "Ingrese el numero de opcion: ";
     cin >> op;
     if ((op < 0) || (op > 2)) {
-      cout << ROJO
+      setColor(RED);
+      cout 
            << "------ Opción no valida, ingrese una opcion valida. ------"
            << endl;
     }
@@ -41,7 +45,7 @@ int usuarios() {
       registro();
       break;
     default: {
-      cout << ROJO
+      cout
            << "------ Opción no valida, ingrese una opcion valida. ------"
            << endl;
       break;
@@ -57,20 +61,25 @@ int usuarios() {
 int menu_inicio_sesion() {
   int op = -1;
   while ((op < 0) || (op > 3)) {
-    cout << ROJO << "--------------------------------------" << endl;
-    cout << LGREEN << R"(
+    setColor(GREEN);
+    cout << "--------------------------------------" << endl;
+    cout << R"(
 +------------------------------+
 |BIENVENIDO AL INICIO DE SESION|
 +------------------------------+
 )" << endl;
-    // cout << LGREEN << "///BIENVENIDO AL INICIO DE SESIÓN///" << endl;
-    cout << GRIS << " 1. Usuario " << endl;
+    setColor(WHITE);
+    cout  << " 1. Usuario " << endl;
+    setColor(WHITE);
     cout << " 2. Administrador" << endl;
+    setColor(WHITE);
     cout << " 0. Regresar " << endl;
+    setColor(LIGHTCYAN);
     cout << "Ingrese el numero de opcion: ";
     cin >> op;
     if ((op < 0) || (op > 3)) {
-      cout << ROJO
+      setColor(RED);
+      cout 
            << "------ Opción no valida, ingrese una opcion valida. ------"
            << endl;
     }
@@ -100,24 +109,33 @@ int iniciar_sesion() {
 // Menu opciones unicamente del administrador
 int menu_admin() {
   int op = -1;
-  while ((op < 0) || (op > 4)) {
-    cout << GRIS << "--------------------------------------" << endl;
-    cout << LGREEN << R"(
+  while ((op < 0) || (op > 5)) {
+    setColor(GREEN);
+    cout  << "--------------------------------------" << endl;
+    cout  << R"(
 +-------------------+
 |MENU ADMINISTRATIVO|
 +-------------------+
         )"
          << endl;
     // cout << LGREEN << "///MENU ADMINISTRATIVO///" << endl;
-    cout << GRIS << " 1. Mostrar libros " << endl;
+    setColor(WHITE);
+    cout  << " 1. Mostrar libros " << endl;
+    setColor(WHITE);
     cout << " 2. Agregar libros " << endl;
+    setColor(WHITE);
     cout << " 3. Modificar libros" << endl;
-    cout << " 4. Mostrar usuarios y contraseña" << endl;
+    setColor(WHITE);
+    cout << " 4. Eliminar libros" << endl;
+    setColor(WHITE);
+    cout << " 5. Mostrar usuarios y contraseña" << endl;
     cout << " 0. Cerrar Sesión " << endl;
+    setColor(LIGHTCYAN);
     cout << "Ingrese el numero de opcion: ";
     cin >> op;
-    if ((op < 0) || (op > 4)) {
-      cout << ROJO
+    if ((op < 0) || (op > 5)) {
+      setColor(RED);
+      cout 
            << "------ Opción no valida, ingrese una opcion valida. ------"
            << endl;
     }
@@ -138,13 +156,20 @@ int opciones_admin() {
       agregarLibro();
       break;
     case 3:
-      cout << ROJO
-           << "Ingrese el ID del libro que desea modificar: " << RESTABLECER
+      setColor(WHITE);
+      cout << "Ingrese el ID del libro que desea modificar: " 
            << endl;
       cin >> id;
       modificarLibro(id);
       break;
     case 4:
+      setColor(WHITE);
+      cout 
+           << "Ingrese el ID del libro que desea eliminar: ";
+      cin >> id;
+      eliminarLibro(id);
+        break;
+    case 5:
       mostrar_usuarios();
       break;
     }
@@ -158,22 +183,28 @@ int opciones_admin() {
 int menu_usuario() {
   int op = -1;
   while ((op < 0) || (op > 3)) {
-    cout << GRIS << "--------------------------------------" << endl;
-    cout << LGREEN << R"(
+    setColor(GREEN);
+    cout  << "--------------------------------------" << endl;
+    cout  << R"(
 +-----------------------------+
 |BIENVENIDO AL MENU DE USUARIO|
 +-----------------------------+
 )" << endl;
     // cout << LGREEN << "///BIENVENIDO AL MENÚ DE USUARIO///" << endl;
-    cout << GRIS << " 1. Alquilar libro " << endl;
+    setColor(WHITE);
+    cout << " 1. Alquilar libro " << endl;
+    setColor(WHITE);
     cout << " 2. Devolver libro " << endl;
+    setColor(WHITE);
     cout << " 3. Buscar libro " << endl;
+    setColor(WHITE);
     cout << " 0. Cerrar Sesión " << endl;
+    setColor(LIGHTCYAN);
     cout << "Ingrese el numero de opcion: ";
     cin >> op;
     if ((op < 0) || (op > 3)) {
-      cout << ROJO
-           << "------ Opción no valida, ingrese una opcion valida. ------"
+      setColor(RED);
+      cout << "------ Opción no valida, ingrese una opcion valida. ------"
            << endl;
     }
   }
@@ -183,7 +214,7 @@ int menu_usuario() {
 
 int opciones_usuario() {
   int opcion, a, b;
-
+  setColor(WHITE);
   cout << "usuario actual: " << user << endl;
 
   opcion = menu_usuario();
@@ -191,12 +222,14 @@ int opciones_usuario() {
     switch (opcion) {
     case 1:
       cout << " " << endl;
+      setColor(WHITE);
       cout << "Ingrese la id del libro que desea alquilar:" << endl;
       cin >> a;
       alquilar_libro(a, user);
       break;
     case 2:
       cout << " " << endl;
+      setColor(WHITE);
       cout << "Ingrese la id del libro que desea devolver:" << endl;
       cin >> b;
       devolver_libro(b, user);

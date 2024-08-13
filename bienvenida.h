@@ -3,6 +3,10 @@
 
 #pragma once
 #include <iostream>
+#include "rlutil.h"
+
+
+using namespace rlutil;
 using namespace std;
 
 void bienvenido();

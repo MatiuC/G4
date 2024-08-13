@@ -8,7 +8,6 @@ ingresar lo que quiere buscar y tiene que mostrar)
 de manera linda)*/
 
 #include "bienvenida.h"
-#include "colores.h"
 #include "menus.h"
 #include "usuarios.h"
 #include "validadores.h"
