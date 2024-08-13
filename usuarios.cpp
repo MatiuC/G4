@@ -223,121 +223,147 @@ void mostrar_usuarios() {
 
 // Funciones para alquilar o devolver un libro por su ID
 void alquilar_libro(int id, string usuario) {
-  Tlibro libros[MAX_LIBROS];
-  int cantidad = cargarlibros(libros);
-  int posicion = -1;
+    Tlibro libros[MAX_LIBROS];
+    int cantidad = cargarlibros(libros);
+    int posicion = -1;
 
-  for (int i = 0; i < cantidad; i++) {
-    if (libros[i].id == id) {
-      posicion = i;
-      break;
+    for (int i = 0; i < cantidad; i++) {
+        if (libros[i].id == id) {
+            posicion = i;
+            break;
+        }
     }
-  }
 
-  // Verificar si el libro existe
-  if (posicion == -1) {
-    setColor(WHITE);
-    cout << "El libro con ID " << id << " no se encontró." << endl;
-    return;
-  }
-  // Verificar si el libro está disponible
-  if (libros[posicion].alquilado == false) {
-    setColor(WHITE);
-    cout << "El libro con ID " << id << " no está disponible para alquiler."
-         << endl;
-    return;
-  }
-  // Actualizar el estado del libro en el archivo "libros.txt"
-  ofstream archivo_libros("libros.txt");
-  for (int i = 0; i < cantidad; i++) {
-    if (libros[i].id == id) {
-      libros[i].alquilado = false;
+    // Verificar si el libro existe
+    if (posicion == -1) {
+        setColor(WHITE);
+        cout << "El libro con ID " << id << " no se encontró." << endl;
+        cout << "Presione ENTER para continuar...";
+        cin.ignore(); // Limpiar buffer
+        cin.get(); // Esperar que el usuario presione ENTER
+        return;
     }
-    archivo_libros << libros[i].id << "," << libros[i].titulo << ","
-                   << libros[i].autor << "," << libros[i].anioPublicacion << ","
-                   << libros[i].editorial << "," << libros[i].alquilado << endl;
-  }
-  archivo_libros.close();
 
-  // Guardar el alquiler del libro en el archivo "alquileres.txt"
-  ofstream archivo_alquileres("alquileres.txt",
-                              ios::app); // Abre el archivo en modo append
-  archivo_alquileres << usuario << "," << id
-                     << endl; // Escribe el usuario y el ID del libro
-  archivo_alquileres.close();
+    // Verificar si el libro está disponible
+    if (libros[posicion].alquilado == false) {
+        setColor(WHITE);
+        cout << "El libro con ID " << id << " no está disponible para alquiler." << endl;
+        cout << "Presione ENTER para continuar...";
+        cin.ignore(); // Limpiar buffer
+        cin.get(); // Esperar que el usuario presione ENTER
+        return;
+    }
 
-  cout << "El libro con ID " << id << " ha sido alquilado exitosamente."
-       << endl;
+    // Actualizar el estado del libro en el archivo "libros.txt"
+    ofstream archivo_libros("libros.txt");
+    for (int i = 0; i < cantidad; i++) {
+        if (libros[i].id == id) {
+            libros[i].alquilado = false;
+        }
+        archivo_libros << libros[i].id << "," << libros[i].titulo << ","
+                       << libros[i].autor << "," << libros[i].anioPublicacion << ","
+                       << libros[i].editorial << "," << libros[i].alquilado << endl;
+    }
+    archivo_libros.close();
+
+    // Guardar el alquiler del libro en el archivo "alquileres.txt"
+    ofstream archivo_alquileres("alquileres.txt", ios::app); // Abre el archivo en modo append
+    archivo_alquileres << usuario << "," << id << endl; // Escribe el usuario y el ID del libro
+    archivo_alquileres.close();
+
+    // Mostrar el mensaje de éxito y esperar a que el usuario presione ENTER
+    setColor(WHITE);
+    cout << "El libro con ID " << id << " ha sido alquilado exitosamente." << endl;
+    cout << "Presione ENTER para continuar...";
+    cin.ignore(); // Limpiar buffer
+    cin.get(); // Esperar que el usuario presione ENTER
+
+    // Limpiar la pantalla
+    cls();
 }
 
 // Funcion para devolver un libro por su ID y actualizar en los archivos
 void devolver_libro(int id, string usuario) {
-  Tlibro libros[MAX_LIBROS];
-  int cantidad = cargarlibros(libros);
-  int posicion = -1;
+    Tlibro libros[MAX_LIBROS];
+    int cantidad = cargarlibros(libros);
+    int posicion = -1;
 
-  for (int i = 0; i < cantidad; i++) {
-    if (libros[i].id == id) {
-      posicion = i;
-      break;
+    for (int i = 0; i < cantidad; i++) {
+        if (libros[i].id == id) {
+            posicion = i;
+            break;
+        }
     }
-  }
 
-  // Verificar si el libro existe
-  if (posicion == -1) {
-    cout << "El libro con ID " << id << " no se encontró." << endl;
-    return;
-  }
-
-  // Verificar si el libro está alquilado por el usuario
-  bool libro_alquilado = false;
-  ifstream archivo_alquileres("alquileres.txt");
-  string linea;
-  while (getline(archivo_alquileres, linea)) {
-    if (linea == usuario + "," + to_string(id)) {
-      libro_alquilado = true;
-      break;
+    // Verificar si el libro existe
+    if (posicion == -1) {
+        setColor(WHITE);
+        cout << "El libro con ID " << id << " no se encontró." << endl;
+        cout << "Presione ENTER para continuar...";
+        cin.ignore(); // Limpiar buffer
+        cin.get(); // Esperar que el usuario presione ENTER
+        return;
     }
-  }
-  archivo_alquileres.close();
 
-  if (!libro_alquilado) {
-    cout << "El usuario " << usuario << " no tiene este libro alquilado."
-         << endl;
-    return;
-  }
-
-  // Actualizar el estado del libro en el archivo "libros.txt"
-  ofstream archivo_libros("libros.txt");
-  for (int i = 0; i < cantidad; i++) {
-    if (libros[i].id == id) {
-      libros[i].alquilado = true;
+    // Verificar si el libro está alquilado por el usuario
+    bool libro_alquilado = false;
+    ifstream archivo_alquileres("alquileres.txt");
+    string linea;
+    while (getline(archivo_alquileres, linea)) {
+        if (linea == usuario + "," + to_string(id)) {
+            libro_alquilado = true;
+            break;
+        }
     }
-    archivo_libros << libros[i].id << "," << libros[i].titulo << ","
-                   << libros[i].autor << "," << libros[i].anioPublicacion << ","
-                   << libros[i].editorial << "," << libros[i].alquilado << endl;
-  }
-  archivo_libros.close();
+    archivo_alquileres.close();
 
-  // Eliminar el registro de alquiler del libro del usuario
-  ifstream archivo_alquileres_original("alquileres.txt");
-  ofstream archivo_alquileres_temp("alquileres_temp.txt"); // Archivo temporal
-
-  while (getline(archivo_alquileres_original, linea)) {
-    // Comprueba si la línea del archivo coincide con el usuario y el ID
-    if (linea != usuario + "," + to_string(id)) {
-      archivo_alquileres_temp << linea
-                              << endl; // Copia la línea al archivo temporal
+    if (!libro_alquilado) {
+        setColor(WHITE);
+        cout << "El usuario " << usuario << " no tiene este libro alquilado." << endl;
+        cout << "Presione ENTER para continuar...";
+        cin.ignore(); // Limpiar buffer
+        cin.get(); // Esperar que el usuario presione ENTER
+        return;
     }
-  }
-  archivo_alquileres_original.close();
-  archivo_alquileres_temp.close();
 
-  // Renombra el archivo temporal al archivo original
-  remove("alquileres.txt");
-  rename("alquileres_temp.txt", "alquileres.txt");
+    // Actualizar el estado del libro en el archivo "libros.txt"
+    ofstream archivo_libros("libros.txt");
+    for (int i = 0; i < cantidad; i++) {
+        if (libros[i].id == id) {
+            libros[i].alquilado = true;
+        }
+        archivo_libros << libros[i].id << "," << libros[i].titulo << ","
+                       << libros[i].autor << "," << libros[i].anioPublicacion << ","
+                       << libros[i].editorial << "," << libros[i].alquilado << endl;
+    }
+    archivo_libros.close();
 
-  cout << "El libro con ID " << id << " ha sido devuelto exitosamente." << endl;
+    // Eliminar el registro de alquiler del libro del usuario
+    ifstream archivo_alquileres_original("alquileres.txt");
+    ofstream archivo_alquileres_temp("alquileres_temp.txt"); // Archivo temporal
+
+    while (getline(archivo_alquileres_original, linea)) {
+        // Comprueba si la línea del archivo coincide con el usuario y el ID
+        if (linea != usuario + "," + to_string(id)) {
+            archivo_alquileres_temp << linea << endl; // Copia la línea al archivo temporal
+        }
+    }
+    archivo_alquileres_original.close();
+    archivo_alquileres_temp.close();
+
+    // Renombra el archivo temporal al archivo original
+    remove("alquileres.txt");
+    rename("alquileres_temp.txt", "alquileres.txt");
+
+    // Mostrar el mensaje de éxito y esperar a que el usuario presione ENTER
+    setColor(WHITE);
+    cout << "El libro con ID " << id << " ha sido devuelto exitosamente." << endl;
+    cout << "Presione ENTER para continuar...";
+    cin.ignore(); // Limpiar buffer
+    cin.get(); // Esperar que el usuario presione ENTER
+
+    // Limpiar la pantalla
+    rlutil::cls();
 }
 
 void buscarPorAutor(const string &autor) {

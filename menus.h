@@ -12,12 +12,10 @@ using namespace rlutil;
 using namespace std;
 
 int usuarios();
-int menu_usuario();
 int menu_usuarios();
 int iniciar_sesion();
 int menu_inicio_sesion();
 int opciones_usuario();
-int menu_admin();
 int opciones_admin();
 
 #endif

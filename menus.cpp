@@ -50,51 +50,15 @@ int usuarios() {
                  } else if (y == 1){
                     registro ();
                  } else {
-                     op = 3;
-                     return -1;
+                     exit(0);
                  }
                  break;
                 
         }
-    } while (op != 2); 
+    } while ((op != 2 ));
     return 0;
 }
-int menu_admin() {
-  int op = -1;
-  while ((op < 0) || (op > 5)) {
-    setColor(GREEN);
-    cout  << "--------------------------------------" << endl;
-    cout  << R"(
-+-------------------+
-|MENU ADMINISTRATIVO|
-+-------------------+
-        )"
-         << endl;
-    // cout << LGREEN << "///MENU ADMINISTRATIVO///" << endl;
-    setColor(WHITE);
-    cout  << " 1. Mostrar libros " << endl;
-    setColor(WHITE);
-    cout << " 2. Agregar libros " << endl;
-    setColor(WHITE);
-    cout << " 3. Modificar libros" << endl;
-    setColor(WHITE);
-    cout << " 4. Eliminar libros" << endl;
-    setColor(WHITE);
-    cout << " 5. Mostrar usuarios y contraseña" << endl;
-    cout << " 0. Cerrar Sesión " << endl;
-    setColor(LIGHTCYAN);
-    cout << "Ingrese el numero de opcion: ";
-    cin >> op;
-    if ((op < 0) || (op > 5)) {
-      setColor(RED);
-      cout 
-           << "------ Opción no valida, ingrese una opcion valida. ------"
-           << endl;
-    }
-  }
-  cout << endl;
-  return op;
-}
+
 
 // Menu de inicio de sesion USUARIO-ADMINISTRADOR
 int iniciar_sesion() {
@@ -122,7 +86,7 @@ int iniciar_sesion() {
                 } else if (y == 1) {
                     iniciar_admin();
                 } else {
-                    return 0;
+                    usuarios();
                 }
                 break;
         }
@@ -176,35 +140,6 @@ int opciones_admin() {
       } while (op != 3); 
       return 0;
   }
-
-// Menu opciones unicamente del usuario
-
-int menu_usuario() {
-  int op = -1;
-  while ((op < 0) || (op > 3)) {
-    cout <<  "--------------------------------------" << endl;
-    cout <<  R"(
-+-----------------------------+
-|BIENVENIDO AL MENU DE USUARIO|
-+-----------------------------+
-)" << endl;
-    // cout << LGREEN << "///BIENVENIDO AL MENÚ DE USUARIO///" << endl;
-    cout << " 1. Alquilar libro " << endl;
-    cout << " 2. Devolver libro " << endl;
-    cout << " 3. Buscar libro " << endl;
-    cout << " 0. Cerrar Sesión " << endl;
-    cout << "Ingrese el numero de opcion: ";
-    cin >> op;
-    if ((op < 0) || (op > 3)) {
-      cout << 
-            "------ Opción no valida, ingrese una opcion valida. ------"
-           << endl;
-    }
-  }
-  cout << endl;
-  return op;
-}
-
 
 int opciones_usuario() {
   int  a, b;
