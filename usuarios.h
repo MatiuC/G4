@@ -1,7 +1,6 @@
 #ifndef USUARIOS_H
 #define USUARIOS_H
 
-
 //#include "libros.h"
 #include <cctype>
 #include <cstring> //biblioteca donde estan las funciones de manejo de cadenas
@@ -11,11 +10,12 @@
 #include <string>
 using namespace std;
 
-// m ira sigueme para organizarnos
-// dime
+//variable global
+
+
 void registro();
 bool verificar_existencia_usuario(char a[]);
-void iniciar_usuario();
+string iniciar_usuario(string &usuario);
 void iniciar_admin();
 void mostrar_usuarios();
 

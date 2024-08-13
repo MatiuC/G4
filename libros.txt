@@ -2,3 +2,4 @@
 2,Java para principiantes,Javier Santoalla,2014,Serwey,0
 3,Crimen y castigo,Fiodor Dostoyevski,2014,Pluto Ediciones,1
 4,Matematicas para la economia,Calvoche,2024,EPN Publicaciones,1
+5,El Circuito,Ben Oliver,2020,Destino,1

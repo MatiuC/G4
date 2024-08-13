@@ -1,11 +1,11 @@
 #ifndef MENUS_H
 #define MENUS_H
 
-#include <iostream>
-#include <fstream>
-#include <string>
-#include <iomanip>
 #include <cstring>
+#include <fstream>
+#include <iomanip>
+#include <iostream>
+#include <string>
 
 using namespace std;
 
@@ -19,5 +19,3 @@ int menu_admin();
 int opciones_admin();
 
 #endif
-
-

@@ -3,7 +3,7 @@
 #include "libros.h"
 #include "usuarios.h"
 // Menu principal de inicio
-
+string user = " ";
 int menu_usuarios() {
   int op = -1;
   while ((op < 0) || (op > 2)) {
@@ -85,7 +85,7 @@ int iniciar_sesion() {
   while (opcion != 0) {
     switch (opcion) {
     case 1:
-      iniciar_usuario();
+      user = iniciar_usuario(user);
       break;
     case 2:
       iniciar_admin();
@@ -93,6 +93,7 @@ int iniciar_sesion() {
     }
     opcion = menu_inicio_sesion();
   }
+
   return 0;
 }
 
@@ -182,6 +183,9 @@ int menu_usuario() {
 
 int opciones_usuario() {
   int opcion, a, b;
+
+  cout << "usuario actual: " << user << endl;
+
   opcion = menu_usuario();
   while (opcion != 0) {
     switch (opcion) {
@@ -189,13 +193,13 @@ int opciones_usuario() {
       cout << " " << endl;
       cout << "Ingrese la id del libro que desea alquilar:" << endl;
       cin >> a;
-      alquilar_libro(a, "derek");
+      alquilar_libro(a, user);
       break;
     case 2:
       cout << " " << endl;
       cout << "Ingrese la id del libro que desea devolver:" << endl;
       cin >> b;
-      devolver_libro(b, "derek");
+      devolver_libro(b, user);
       break;
     case 3:
       mostrarlibros();

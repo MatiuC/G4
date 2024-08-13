@@ -33,8 +33,8 @@ void registro() {
 
 //  Funcion para el ingreso al sistema bibliotecario
 
-void iniciar_usuario() {
-  string usuario, contrasena;
+string iniciar_usuario(string &usuario) {
+  string contrasena;
   int x = 0;
   cout << "--------------------------------------" << endl;
   cout << "Ingrese su usuario: ";
@@ -44,7 +44,7 @@ void iniciar_usuario() {
   ifstream dato_usuario("usuario.txt");
   if (!dato_usuario) {
     cout << "\nArchivo de usuarios no encontrado" << endl;
-    return ;
+    return " ";
   }
   string a, b;
   while (dato_usuario >> a >> b) {
@@ -55,14 +55,14 @@ void iniciar_usuario() {
   }
   dato_usuario.close();
 
-  //Validador de inicio de sesion exitoso
+  // Validador de inicio de sesion exitoso
   if (x == 1) {
     cout << "Inicio de sesion exitoso" << endl;
     opciones_usuario();
   } else {
     cout << "Usuario o contraseña incorrectos" << endl;
   }
-
+  return usuario;
 }
 
 // Funcion que permite saber si el usuario ingresado ya existe o no
@@ -108,11 +108,12 @@ void mostrar_usuarios() {
     return;
   }
 
-  cout << "Usuarios con su respectiva contraseña:" << endl;  
+  cout << "Usuarios con su respectiva contraseña:" << endl;
   cout << "--------------------------------------" << endl;
   while (lectura_usuario >> usuario >> contraseña) {
-    cout << "Usuario: " << usuario << ":  |" << contraseña << left << setw(6) << "|" << endl;
-  cout << "--------------------------------------" << endl;
+    cout << "Usuario: " << usuario << ":  |" << contraseña << left << setw(6)
+         << "|" << endl;
+    cout << "--------------------------------------" << endl;
   }
 
   lectura_usuario.close();
@@ -155,8 +156,8 @@ void alquilar_libro(int id, string usuario) {
   archivo_libros.close();
 
   // Guardar el alquiler del libro en el archivo "alquileres.txt"
-  ofstream archivo_alquileres(
-      "alquileres.txt"); // Abre el archivo en modo append
+  ofstream archivo_alquileres("alquileres.txt",
+                              ios::app); // Abre el archivo en modo append
   archivo_alquileres << usuario << "," << id
                      << endl; // Escribe el usuario y el ID del libro
   archivo_alquileres.close();
@@ -165,8 +166,7 @@ void alquilar_libro(int id, string usuario) {
        << endl;
 }
 
-
-//Funcion para devolver un libro por su ID y actualizar en los archivos
+// Funcion para devolver un libro por su ID y actualizar en los archivos
 void devolver_libro(int id, string usuario) {
   Tlibro libros[MAX_LIBROS];
   int cantidad = cargarlibros(libros);
@@ -198,7 +198,8 @@ void devolver_libro(int id, string usuario) {
   archivo_alquileres.close();
 
   if (!libro_alquilado) {
-    cout << "El usuario " << usuario << " no tiene este libro alquilado." << endl;
+    cout << "El usuario " << usuario << " no tiene este libro alquilado."
+         << endl;
     return;
   }
 
@@ -221,7 +222,8 @@ void devolver_libro(int id, string usuario) {
   while (getline(archivo_alquileres_original, linea)) {
     // Comprueba si la línea del archivo coincide con el usuario y el ID
     if (linea != usuario + "," + to_string(id)) {
-      archivo_alquileres_temp << linea << endl; // Copia la línea al archivo temporal
+      archivo_alquileres_temp << linea
+                              << endl; // Copia la línea al archivo temporal
     }
   }
   archivo_alquileres_original.close();
@@ -233,4 +235,3 @@ void devolver_libro(int id, string usuario) {
 
   cout << "El libro con ID " << id << " ha sido devuelto exitosamente." << endl;
 }
-
