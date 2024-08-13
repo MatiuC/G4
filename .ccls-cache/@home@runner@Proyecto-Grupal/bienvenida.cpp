@@ -1,6 +1,8 @@
 #include "bienvenida.h"
+#include "colores.h"
+using namespace std;
 void bienvenido() {
-    cout << R"(
+    cout << NARANJA << R"(
   ____    _                                         _       _         
  |  _ \  (_)                                       (_)     | |        
  | |_) |  _    ___   _ __   __   __   ___   _ __    _    __| |   ___  
@@ -33,6 +35,17 @@ void biblioteca(){
 
     )" << endl;
 }
+void continuar(){
+    cout << LGREEN << R"(
+                 +-----------------------------+
+                 |PRESIONE ENTER PARA CONTINUAR|
+                 +-----------------------------+
+    )" << endl;
+    cin.get();
+}
 
-
-
+void printLargeMessage(){
+  bienvenido();
+  al_sistema_de();
+  biblioteca();
+}

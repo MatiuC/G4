@@ -1,2 +1,4 @@
-2,Mecanica Elemental,Sterw,2000,555-Pop,1
-1,C++ Fundamentos,988-Lyhg,2016,6ma edicion,1
+1,C++ Fundamentos,Michael Stews,2015,6ma Edicion,1
+2,Java para principiantes,Javier Santoalla,2014,Serwey,0
+3,Crimen y castigo,Fiodor Dostoyevski,2014,Pluto Ediciones,1
+4,Matematicas para la economia,Calvoche,2024,EPN Publicaciones,1

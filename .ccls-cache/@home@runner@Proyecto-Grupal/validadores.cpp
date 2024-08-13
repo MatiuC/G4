@@ -7,7 +7,7 @@ bool validarId(int id) {
 
 // Función para validar el año de publicación
 bool validarAnio(int anio) {
-    return anio >= 1900 && anio <= 2100; // El año debe estar entre 1900 y 2100
+    return anio >= 1900 && anio <= 2024; // El año debe estar entre 1900 y 2024
 }
 
 // Función para validar el texto (no vacío)

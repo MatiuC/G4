@@ -1,114 +1,236 @@
 #include "usuarios.h"
+#include "libros.h"
+#include "menus.h"
 
-int cont_usuario = 6;
-
-// Funcion para el registro de un nuevo usuario al sistema 
-void registro(){
-    tUsuario persona[MAX];
-    int i = 0;
-    bool usuario_existe = true; 
-    char usuario[MAX];
+// Funcion para el registro de un nuevo usuario al sistema
+void registro() {
+  tUsuario persona[MAX];
+  int i = 0;
+  bool usuario_existe = true;
+  char usuario[MAX];
 
   while (usuario_existe) {
-      cout << "Ingrese su usuario: ";
-      cin >> usuario; 
-      //Funcion para verificar la existencia o no de un usuario para que no se repita
-      usuario_existe= verificar_existencia_usuario(usuario); 
-      if (usuario_existe) {
-          cout << "El usuario ya existe. Ingrese otro usuario: " << endl;
-      }
-  }
-    //strcpy permite copiar el contenido de una cadena a otra
-    strcpy(persona[i].usuario, usuario); 
-    cout << "Ingrese su contraseña: ";
-    cin >> persona[i].contrasena;
-    ofstream dato_usuario; 
-    //ios::app permite agregar nuevos datos en un archivo ya escrito
-    dato_usuario.open("usuario.txt", ios::app);
-    dato_usuario << persona[i].usuario << " " << persona[i].contrasena << endl; 
-    cout << "\nRegistro exitoso" << endl;
-} 
-//Funcion para el ingreso al sistema bibliotecario
-// Funcion para el ingreso al sistema bibliotecario
-void iniciar_usuario(){
-    string usuario, contrasena;
-    int x = 0;
+    cout << "--------------------------------------" << endl;
     cout << "Ingrese su usuario: ";
     cin >> usuario;
-    cout << "Ingrese su contraseña: ";
-    cin >> contrasena;
-    ifstream dato_usuario("usuario.txt");
-    if (!dato_usuario) {
-        cout << "\nArchivo de usuarios no encontrado" << endl;
-         return; 
+    // Funcion para verificar la existencia o no de un usuario para que no se
+    // repita
+    usuario_existe = verificar_existencia_usuario(usuario);
+    if (usuario_existe) {
+      cout << "El usuario ya existe. Ingrese otro usuario: " << endl;
     }
-    string a, b;
-    while (dato_usuario >> a >> b) {
-        if (a == usuario && b == contrasena) {
-             x = 1;
-             break;
-        }
-    }
-    dato_usuario.close();
-     if (x == 1) {
-        cout << "Inicio de sesion exitoso" << endl;
-    } else {
-        cout << "Usuario o contraseña incorrectos" << endl;
-    }
+  }
+  // strcpy permite copiar el contenido de una cadena a otra
+  strcpy(persona[i].usuario, usuario);
+  cout << "Ingrese su contraseña: ";
+  cin >> persona[i].contrasena;
+  ofstream dato_usuario;
+  // ios::app permite agregar nuevos datos en un archivo ya escrito
+  dato_usuario.open("usuario.txt", ios::app);
+  dato_usuario << persona[i].usuario << " " << persona[i].contrasena << endl;
+  cout << "\nRegistro exitoso" << endl;
 }
 
-//Funcion que permite saber si el usuario ingresado ya existe o no 
-bool verificar_existencia_usuario(char a[])
-{
-  char line[MAX]; 
-  ifstream dato_usuario("usuario.txt"); 
-  while (dato_usuario >> line){
-      if (strcmp(line, a) == 0) {
-          return true; 
-      }
+//  Funcion para el ingreso al sistema bibliotecario
+
+void iniciar_usuario() {
+  string usuario, contrasena;
+  int x = 0;
+  cout << "--------------------------------------" << endl;
+  cout << "Ingrese su usuario: ";
+  cin >> usuario;
+  cout << "Ingrese su contraseña: ";
+  cin >> contrasena;
+  ifstream dato_usuario("usuario.txt");
+  if (!dato_usuario) {
+    cout << "\nArchivo de usuarios no encontrado" << endl;
+    return ;
+  }
+  string a, b;
+  while (dato_usuario >> a >> b) {
+    if (a == usuario && b == contrasena) {
+      x = 1;
+      break;
+    }
+  }
+  dato_usuario.close();
+
+  //Validador de inicio de sesion exitoso
+  if (x == 1) {
+    cout << "Inicio de sesion exitoso" << endl;
+    opciones_usuario();
+  } else {
+    cout << "Usuario o contraseña incorrectos" << endl;
+  }
+
+}
+
+// Funcion que permite saber si el usuario ingresado ya existe o no
+bool verificar_existencia_usuario(char a[]) {
+  char line[MAX];
+  ifstream dato_usuario("usuario.txt");
+  while (dato_usuario >> line) {
+    if (strcmp(line, a) == 0) {
+      return true;
+    }
   }
   return false;
 }
 
-//Funcion para el ingreso al sistema administrativo
-void iniciar_admin(){
-    string admin, contraseña, admin1, contraseña1;
-    ifstream lectura_admin;
-        lectura_admin.open("u_admin.txt");
-          lectura_admin>> admin;
-          lectura_admin>> contraseña;
-        lectura_admin.close();
-    cout << "Ingrese su usuario: " ;
-    cin >> admin1;
-    cout << "Ingrese su contraseña: " ;
-    cin >> contraseña1;
-    if (admin == admin1 && contraseña == contraseña1){
-        cout << "Inicio de sesion exitoso" << endl;
-        opciones_admin();
-    }
-    else {
-        cout << "Inicio de sesion fallido, vuelva a intentar" << endl;
-    }
+// Funcion para el ingreso al sistema administrativo
+void iniciar_admin() {
+  string admin, contraseña, admin1, contraseña1;
+  ifstream lectura_admin;
+  lectura_admin.open("u_admin.txt");
+  lectura_admin >> admin;
+  lectura_admin >> contraseña;
+  lectura_admin.close();
+  cout << "--------------------------------------" << endl;
+  cout << "Ingrese su usuario: ";
+  cin >> admin1;
+  cout << "Ingrese su contraseña: ";
+  cin >> contraseña1;
+  if (admin == admin1 && contraseña == contraseña1) {
+    cout << "Inicio de sesion exitoso" << endl;
+    opciones_admin();
+  } else {
+    cout << "////// Inicio de sesion fallido, vuelva a intentar //////" << endl;
+  }
 }
 
 void mostrar_usuarios() {
-    string usuario, contraseña;
-    ifstream lectura_usuario("usuario.txt");
+  string usuario, contraseña;
+  ifstream lectura_usuario("usuario.txt");
 
-    //Verifica si el archivo existe
-    if (!lectura_usuario.is_open()) {
-        cout << "Error al abrir el archivo." << endl;
-        return;
-    }
-    
-    cout << "Usuarios: " << endl << "Contraseña:" << endl; //Separacion de 5 digitos
-    
-    while (lectura_usuario >> usuario >> contraseña) {
-        cout << usuario << endl << contraseña <<  setw(4) << "|" << endl;
-        cout << "-------------------------------"  << endl;
-    }
+  // Verifica si el archivo existe
+  if (!lectura_usuario.is_open()) {
+    cout << "Error al abrir el archivo." << endl;
+    return;
+  }
 
-    lectura_usuario.close();
+  cout << "Usuarios con su respectiva contraseña:" << endl;  
+  cout << "--------------------------------------" << endl;
+  while (lectura_usuario >> usuario >> contraseña) {
+    cout << "Usuario: " << usuario << ":  |" << contraseña << left << setw(6) << "|" << endl;
+  cout << "--------------------------------------" << endl;
+  }
+
+  lectura_usuario.close();
 }
 
-//Funciones para alquilar o devolver un libro por su ID
+// Funciones para alquilar o devolver un libro por su ID
+void alquilar_libro(int id, string usuario) {
+  Tlibro libros[MAX_LIBROS];
+  int cantidad = cargarlibros(libros);
+  int posicion = -1;
+
+  for (int i = 0; i < cantidad; i++) {
+    if (libros[i].id == id) {
+      posicion = i;
+      break;
+    }
+  }
+
+  // Verificar si el libro existe
+  if (posicion == -1) {
+    cout << "El libro con ID " << id << " no se encontró." << endl;
+    return;
+  }
+  // Verificar si el libro está disponible
+  if (libros[posicion].alquilado == false) {
+    cout << "El libro con ID " << id << " no está disponible para alquiler."
+         << endl;
+    return;
+  }
+  // Actualizar el estado del libro en el archivo "libros.txt"
+  ofstream archivo_libros("libros.txt");
+  for (int i = 0; i < cantidad; i++) {
+    if (libros[i].id == id) {
+      libros[i].alquilado = false;
+    }
+    archivo_libros << libros[i].id << "," << libros[i].titulo << ","
+                   << libros[i].autor << "," << libros[i].anioPublicacion << ","
+                   << libros[i].editorial << "," << libros[i].alquilado << endl;
+  }
+  archivo_libros.close();
+
+  // Guardar el alquiler del libro en el archivo "alquileres.txt"
+  ofstream archivo_alquileres(
+      "alquileres.txt"); // Abre el archivo en modo append
+  archivo_alquileres << usuario << "," << id
+                     << endl; // Escribe el usuario y el ID del libro
+  archivo_alquileres.close();
+
+  cout << "El libro con ID " << id << " ha sido alquilado exitosamente."
+       << endl;
+}
+
+
+//Funcion para devolver un libro por su ID y actualizar en los archivos
+void devolver_libro(int id, string usuario) {
+  Tlibro libros[MAX_LIBROS];
+  int cantidad = cargarlibros(libros);
+  int posicion = -1;
+
+  for (int i = 0; i < cantidad; i++) {
+    if (libros[i].id == id) {
+      posicion = i;
+      break;
+    }
+  }
+
+  // Verificar si el libro existe
+  if (posicion == -1) {
+    cout << "El libro con ID " << id << " no se encontró." << endl;
+    return;
+  }
+
+  // Verificar si el libro está alquilado por el usuario
+  bool libro_alquilado = false;
+  ifstream archivo_alquileres("alquileres.txt");
+  string linea;
+  while (getline(archivo_alquileres, linea)) {
+    if (linea == usuario + "," + to_string(id)) {
+      libro_alquilado = true;
+      break;
+    }
+  }
+  archivo_alquileres.close();
+
+  if (!libro_alquilado) {
+    cout << "El usuario " << usuario << " no tiene este libro alquilado." << endl;
+    return;
+  }
+
+  // Actualizar el estado del libro en el archivo "libros.txt"
+  ofstream archivo_libros("libros.txt");
+  for (int i = 0; i < cantidad; i++) {
+    if (libros[i].id == id) {
+      libros[i].alquilado = true;
+    }
+    archivo_libros << libros[i].id << "," << libros[i].titulo << ","
+                   << libros[i].autor << "," << libros[i].anioPublicacion << ","
+                   << libros[i].editorial << "," << libros[i].alquilado << endl;
+  }
+  archivo_libros.close();
+
+  // Eliminar el registro de alquiler del libro del usuario
+  ifstream archivo_alquileres_original("alquileres.txt");
+  ofstream archivo_alquileres_temp("alquileres_temp.txt"); // Archivo temporal
+
+  while (getline(archivo_alquileres_original, linea)) {
+    // Comprueba si la línea del archivo coincide con el usuario y el ID
+    if (linea != usuario + "," + to_string(id)) {
+      archivo_alquileres_temp << linea << endl; // Copia la línea al archivo temporal
+    }
+  }
+  archivo_alquileres_original.close();
+  archivo_alquileres_temp.close();
+
+  // Renombra el archivo temporal al archivo original
+  remove("alquileres.txt");
+  rename("alquileres_temp.txt", "alquileres.txt");
+
+  cout << "El libro con ID " << id << " ha sido devuelto exitosamente." << endl;
+}
+

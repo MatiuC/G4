@@ -1,5 +1,6 @@
 #include "libros.h"
 #include "validadores.h"
+#include "colores.h"
 
 // Validador de apertura de archivos
 bool verificarfile(ifstream &file, string archivo) {
@@ -70,7 +71,6 @@ bool guardarLibros(Tlibro libros[], int cantidadLibros, const string &nombreArch
     return true;
 }
 
-
 // Funcion para verificar si ya existe un libro con un mismo id, los id tienen
 // que ser unicos
 bool libroexiste(const int &id, Tlibro libros[], int cantidad) {
@@ -138,15 +138,16 @@ void mostrarlibros() {
         return;
     }
 
-    cout << "Lista de libros:" << endl;
+    cout << RESTABLECER << "Lista de libros:" << endl;
+    cout << "---------------------------------\n";
     for (int i = 0; i < cantidadLibros; i++) {
-        cout << "ID: " << libros[i].id << endl;
-        cout << "Título: " << libros[i].titulo << endl;
-        cout << "Autor: " << libros[i].autor << endl;
-        cout << "Año de Publicación: " << libros[i].anioPublicacion << endl;
-        cout << "Editorial: " << libros[i].editorial << endl;
-        cout << "Disponible para alquilar: " << (libros[i].alquilado ? "Sí" : "No") << endl;
-        cout << "---------------------------------" << endl;
+        cout << NARANJA << "ID: " << RESTABLECER << libros[i].id << endl;
+        cout << NARANJA << "Título: " << RESTABLECER << libros[i].titulo << endl;
+        cout << NARANJA << "Autor: " << RESTABLECER << libros[i].autor << endl;
+        cout << NARANJA << "Año de Publicación: " << RESTABLECER << libros[i].anioPublicacion << endl;
+        cout << NARANJA << "Editorial: " << RESTABLECER << libros[i].editorial << endl;
+        cout << NARANJA << "Disponible para alquilar: " << RESTABLECER << (libros[i].alquilado ? "Sí" : "No") << endl;
+        cout << BLANCO << "---------------------------------" << endl;
     }
 }
 
@@ -207,9 +208,9 @@ void modificarLibro(int id) {
         if (libros[i].id == id) {
             posicion = i;
             break;
-        }
+        } 
     }
-
+    
     if (posicion == -1) {
         cout << "No se encontró un libro con el ID " << id << endl;
         return;
@@ -229,7 +230,8 @@ void modificarLibro(int id) {
     string nuevoTitulo, nuevoAutor, nuevaEditorial;
     string nuevoAnioStr, nuevoEstadoStr;
     int nuevoAnio, nuevoEstado;
-
+    
+    cin.ignore();
     leerTextoValidoOpcional(nuevoTitulo, "Nuevo título: ", libros[posicion].titulo);
     leerTextoValidoOpcional(nuevoAutor, "Nuevo autor: ", libros[posicion].autor);
 
@@ -273,4 +275,5 @@ void modificarLibro(int id) {
         cout << "Error al modificar el libro." << endl;
     }
 }
+
 
