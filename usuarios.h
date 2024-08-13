@@ -19,6 +19,10 @@ bool verificar_existencia_usuario(char a[]);
 string iniciar_usuario(string &usuario);
 void iniciar_admin();
 void mostrar_usuarios();
+
+
+//Buscar un tipo de libros
+void buscarDisponibles();
 void buscarPorAutor(const string& autor);
 
 // ALQUILER

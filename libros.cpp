@@ -178,6 +178,7 @@ void mostrarlibros() {
     cout << "\nUsa 'p' para ir a la página siguiente, 'o' para ir a la página "
             "anterior. Presiona 'q' para salir."
          << endl;
+    setColor(LIGHTGREEN);
       cout << "Página actual: " << pagina + 1 << " de " << numPaginas << endl;
     int key = getkey(); // Capturar la tecla presionada
 

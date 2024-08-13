@@ -1,4 +1,4 @@
-1,C++ Fundamentos,Michael Stews,2015,6ma Edicion,0
+1,C++ Fundamentos,Michael Stews,2015,6ma Edicion,1
 2,Java para principiantes,Javier Santoalla,2014,Serwey,1
 3,JavaScript,Fiodor Dostoyevski,2014,Pluto Ediciones,1
 4,Matematicas para la economia,Calvoche,2024,EPN Publicaciones,1
@@ -14,8 +14,8 @@
 14,Algoritmos: Diseño y análisis,Thomas H. Cormen,2009,McGraw-Hill,1
 15,Física para ciencias e ingeniería,Raymond A. Serway,2013,Cengage Learning,1
 16,La metamorfosis,Franz Kafka,2003,Editorial Siruela,1
-17,Teoría de juegos,Drew Fudenberg,1991,MIT Press,1
-18,Redes neuronales y aprendizaje profundo,Ian Goodfellow,2016,MIT Press,0
+17,Teoría de juegos,Drew Fudenberg,1991,MIT Press,0
+18,Redes neuronales y aprendizaje profundo,Ian Goodfellow,2016,MIT Press,1
 19,Sistemas operativos,Andrew S. Tanenbaum,2014,Pearson,1
 20,La teoría del todo,Stephen Hawking,2002,Crítica,1
 21,Fundamentos de bases de datos,Abraham Silberschatz,2010,McGraw-Hill,0

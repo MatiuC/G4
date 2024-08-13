@@ -396,8 +396,13 @@ void buscarPorAutor(const string &autor) {
   lecturalibros.close();
 
   if (cantidadLibros == 0) {
+    setColor(RED);
     cout << "No se encontró ningún libro del autor " << autor << "." << endl;
-    return;
+    setColor(GREEN);
+    cout << "Presiona cualquier tecla para continuar " << "." << endl;
+    int key = getkey(); // Capturar la tecla presionada
+    if (key != 0) {
+      return;}
   }
 
   int elementosPorPagina = 5;
@@ -424,7 +429,84 @@ void buscarPorAutor(const string &autor) {
       cout << "Dispinibilidad: " << (stock[i] == "1" ? "Si" : "No") << endl;
       cout << "-----------------------" << endl;
     }
+      cout << "Página actual: " << pagina + 1 << " de " << numPaginas << endl;
+    cout << "\nUsa 'p' para ir a la página siguiente, 'o' para ir a la página "
+            "anterior. Presiona 'q' para salir."
+         << endl;
 
+    int key = getkey(); // Capturar la tecla presionada
+
+    if (key == 'p' && pagina < numPaginas - 1) {
+      pagina++;
+    } else if (key == 'o' && pagina > 0) {
+      pagina--;
+    } else if (key == 'q') { // Salir si presionas 'q'
+      break;
+    }
+  }
+}
+
+void buscarDisponibles() {
+  const int MAX_LIBROS = 100; // Tamaño máximo para el arreglo
+  int id[MAX_LIBROS];
+  string titulo[MAX_LIBROS], autorLibro[MAX_LIBROS], anio[MAX_LIBROS],
+      edicion[MAX_LIBROS], stock[MAX_LIBROS];
+  int cantidadLibros = 0;
+
+  ifstream lecturalibros("libros.txt");
+  if (!lecturalibros.is_open()) {
+    cout << "No se pudo abrir el archivo." << endl;
+    return;
+  }
+
+  while (lecturalibros >> id[cantidadLibros]) {
+    lecturalibros.ignore(); // Ignora la coma
+
+    // Lee el título, autor, año, edición y stock
+    getline(lecturalibros, titulo[cantidadLibros], ',');
+    getline(lecturalibros, autorLibro[cantidadLibros], ',');
+    getline(lecturalibros, anio[cantidadLibros], ',');
+    getline(lecturalibros, edicion[cantidadLibros], ',');
+    getline(lecturalibros, stock[cantidadLibros]);
+
+    if (stock[cantidadLibros] == "1") {
+      cantidadLibros++;
+    }
+  }
+  lecturalibros.close();
+
+  if (cantidadLibros == 0) {
+    setColor(RED);
+    cout << "No se encontró ningún libro disponible" << endl;
+    return;
+  }
+
+  int elementosPorPagina = 5;
+  int pagina = 0;
+  int numPaginas =
+      (cantidadLibros + elementosPorPagina - 1) / elementosPorPagina;
+
+  while (true) {
+    cls(); // Limpiar la pantalla
+
+    setColor(LIGHTGREEN);
+    cout << "Libros Disponibles:" << endl;
+    cout << "-----------------------" << endl;
+
+    int inicio = pagina * elementosPorPagina;
+    int fin = min(inicio + elementosPorPagina, cantidadLibros);
+
+    for (int i = inicio; i < fin; ++i) {
+      setColor(WHITE);
+      cout << "ID: " << id[i] << endl;
+      cout << "Título: " << titulo[i] << endl;
+      cout << "Autor: " << autorLibro[i] << endl;
+      cout << "Año: " << anio[i] << endl;
+      cout << "Edición: " << edicion[i] << endl;
+      cout << "Dispinibilidad: " << (stock[i] == "1" ? "Si" : "No") << endl;
+      cout << "-----------------------" << endl;
+    }
+      cout << "Página actual: " << pagina + 1 << " de " << numPaginas << endl;
     cout << "\nUsa 'p' para ir a la página siguiente, 'o' para ir a la página "
             "anterior. Presiona 'q' para salir."
          << endl;
